@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<domain version="1.0"
+    xmlns="http://unact.net/xml/xi"
+    server="STCentral"
+>
+
+    <concept name="ST">
+        
+        <select owner="sys" sql-name="dummy"/>
+        
+    </concept>
+    
+</domain>
