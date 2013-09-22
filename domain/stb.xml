@@ -103,6 +103,22 @@
         
     </concept>
     
+    <concept name="stb-accrual" label="Начисление">
+        
+        <property name="xid"/>
+        <property name="id" key="true" type="int"/>
+        
+        <property name="issue-href" label="Техзадание"/>
+        <property name="volume" type="int" label="Кол-во"/>
+        <property name="description" label="Описание"/>
+        
+        <property name="acceptance-date" type="date" label="Дата приемки"/>
+        
+        <role name="org" actor="stb-org"/>
+        <role name="service" actor="stb-service"/>
+        
+    </concept>
+    
     <concept name="stb-usage">
         
         <property name="xid"/>
@@ -116,6 +132,7 @@
         <property name="cnt" type="int" label="Кол-во запросов"/>
         
         <role name="db" actor="stb-db"/>
+        <role name="service" actor="stb-service"/>
         
     </concept>
     
