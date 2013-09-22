@@ -1,10 +1,10 @@
 create or replace procedure stb.updateStats (
     @dbname STRING default null,
-    @syncUpTo datetime default datetime (left(dateadd(hour,-1,now()),13)+':00')
+    @syncUpTo datetime default datetime (left(dateadd(hour,-1,now()),13)+':00'),
+    @pageSize int default 500
 ) begin
 
     declare @actk STRING;
-    declare @url STRING;
     
     set @actk= (select accessToken
         from openxml(uac.UOAuthRefreshToken(
@@ -21,7 +21,13 @@ create or replace procedure stb.updateStats (
             , dateadd(minute, tzmntss, @syncUpTo) as @dateE
             , 1 as @page
             , cast('' as xml) as @partialResponse
-            , cast('' as xml) as @response
+            , cast('' as xml) as @response,
+            string( db.hrefGet
+                , 'st.userstats.xml/'
+                , '@dateB=', http_encode(left(@dateB,16))
+                , '&@dateE=', http_encode(left(@dateE,16))
+                , '?page-size:=', @pageSize, '&page-number:='
+            ) as @url
         from stb.db join stb.crt
         where (db.name = @dbname or @dbname is null)
             and @dateB<@dateE
@@ -29,22 +35,14 @@ create or replace procedure stb.updateStats (
         
         WHILE (@page > 0) LOOP
             
-            set @url = string( hrefGet
-                    , 'st.userstats.xml/'
-                    , '@dateB=', http_encode(left(@dateB,16))
-                    , '&@dateE=', http_encode(left(@dateE,16))
-                    , '?page-size:=500&page-number:=', @page
-                )
-            ;
-            
-            message 'stb.updateStats has requested url: ', @url
+            message 'stb.updateStats has requested url: ', @url, @page
                 to client
             ;
             
             select util.httpsGet (
-                @url,
-                string ('authorization:', @actk),
-                string ('cert=', pem)
+                string (@url, @page)
+                , string ('authorization:', @actk)
+                , string ('cert=', pem)
             ) into @partialResponse;
             
             message 'stb.updateStats got page ', @page
