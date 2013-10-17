@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+<view-definition xmlns="http://unact.net/xml/xi" name="stb-orgs" label="Каталог организаций">
+	
+    <view-schema>
+        <form name="ST">
+			
+            <parameter name="name">
+                <init with="username"/>
+            </parameter>
+			
+            <parameter name="org">
+                <init with="role">org</init>
+            </parameter>
+			
+			<form name="stb-orgs" is-set="true" concept="stb-org" extendable="true">
+				
+				<field name="id"/>
+				<field name="xid"/>
+				
+				<add-labeled-fields/>
+				
+			</form>
+			
+			<form name="stb-org-detailed" concept="stb-org">
+				
+				<parameter name="org-to-detail-id" type="int" property="id" modifiable="true"/>
+				
+				<field name="id"/>
+				<add-labeled-fields/>
+				
+				<form name="stb-contract" is-set="true" extendable="true" deletable="true" parent-sql-name="org">
+					
+					<field name="id"/>
+					<field name="xid"/>
+					
+					<field name="ndoc" editable="true"/>
+					<field name="dateB" editable="true"/>
+					<field name="dateE" editable="true"/>
+					
+				</form>
+				
+				<form name="stb-contract-detailed" concept="stb-contract">
+					
+					<parameter name="contract-to-detail-id" type="int" property="id" modifiable="true"/>
+					
+					<field name="id"/>
+					<add-labeled-fields/>
+					
+					<form name="stb-tariff" is-set="true" extendable="true" deletable="true" parent-sql-name="contract">
+						
+						<field name="xid"/>
+						
+						<field name="price" editable="true"/>
+						
+						<form name="stb-service" choise="stb-service-cache" label="Услуга" role="service">
+							<field name="id"/>
+							<field name="name"/>
+						</form>
+						
+					</form>
+					
+				</form>
+				
+			</form>
+			
+			<form name="stb-service-cache" concept="stb-service" is-set="true">
+				<field name="id"/>
+				<field name="name"/>
+			</form>
+			
+        </form>
+    </view-schema>
+	
+    <workflow>
+		
+        <step name="index-step">
+			
+            <display>
+				
+				<grid form="stb-orgs">
+					<option reuse="org-detail-button"/>
+				</grid>
+				
+            </display>
+            
+        </step>
+		
+        <step name="detail-step" label="Детали организации" hidden="true">
+			
+            <options>
+				<option reuse="to-index"/>
+            </options>
+			
+            <display>
+				
+				<print form="stb-org-detailed" field="*"/>
+				
+				<region class="tabs-">
+					<grid form="stb-contract" label="Контракты">
+						<option reuse="contract-detail-button"/>
+					</grid>
+				</region>
+				
+				
+            </display>
+			
+        </step>
+		
+        <step name="contract-detail-step" label="Детали Договора" hidden="true">
+			
+            <options>
+				<option reuse="to-index"/>
+				<option reuse="to-detail"/>
+            </options>
+			
+            <display>
+				
+				<print form="stb-contract-detailed" field="*"/>
+				
+				<region class="tabs-">
+					<grid form="stb-tariff" label="Тарификция"/>
+				</region>
+				
+				
+            </display>
+			
+        </step>
+		
+		<reusables>
+			
+            <option name="contract-detail-button" label="...">
+                <command name="contract-to-detail-id" xpath-compute="xi:datum[@name='id']"/>
+				<command name="stb-orgs">contract-detail-step</command>
+            </option>
+			
+            <option name="org-detail-button" label="...">
+                <command name="org-to-detail-id" xpath-compute="xi:datum[@name='id']"/>
+				<command name="stb-orgs">detail-step</command>
+            </option>
+			
+            <option name="to-index" label="К списку организаций">
+				<command name="stb-orgs">index-step</command>
+            </option>
+			
+            <option name="to-detail" label="К деталям Организации">
+				<command name="stb-orgs">detail-step</command>
+            </option>
+			
+		</reusables>
+		
+    </workflow>
+	
+</view-definition>

@@ -7,7 +7,8 @@
 
     <concept name="stb-org">
         
-        <select owner="stb" sql-name="Org" />
+        <select owner="stb" sql-name="Org"/>
+        <save owner="stb" sql-name="Org"/>
         
         <property name="xid"/>
         <property name="id" key="true" type="int"/>
@@ -18,6 +19,9 @@
     
     <concept name="stb-contract">
         
+        <select owner="stb" sql-name="Contract"/>
+        <save owner="stb" sql-name="Contract"/>
+        
         <property name="xid"/>
         <property name="id" key="true" type="int"/>
         
@@ -25,30 +29,31 @@
         <property name="dateB" type="date" label="Дата начала"/>
         <property name="dateE" type="date" label="Дата окончания"/>
         
-        <property name="name" label="Название" sql-compute="string(ndoc, ' от ', [date]"/>
+        <property name="name" label="Название" sql-compute="string(ndoc, ' от ', [dateB])"/>
         
         <role name="org" actor="stb-org"/>
         
     </concept>
     
-    <concept name="stb-contract-tariff">
+    <concept name="stb-tariff">
         
-        <select owner="stb" sql-name="period" type="procedure">
-            <parameter name="stb-period" sql-name="@period" type="int"/>
-        </select>
+        <select owner="stb" sql-name="Tariff"/>
+        <save owner="stb" sql-name="Tariff"/>
         
         <property name="xid"/>
         <property name="id" key="true" type="int"/>
         
-        <property name="price" label="Цена"/>
+        <property name="price" type="decimal" label="Цена"/>
         
-        <role name="contract" actor="stb-contract"/>
-        <role name="service" actor="stb-service"/>
-        <role name="stb-period" actor="stb-period"/>
+        <role name="contract" actor="stb-contract" sql-name="contract"/>
+        <role name="service" actor="stb-service" sql-name="service"/>
         
     </concept>
     
     <concept name="stb-service">
+        
+        <select owner="stb" sql-name="Service"/>
+        <save owner="stb" sql-name="Service"/>
         
         <property name="xid"/>
         <property name="id" key="true" type="int"/>
@@ -59,16 +64,13 @@
     
     <concept name="stb-period">
         
-        <select type="procedure" owner="stb" sql-name="periodByOrg">
-            <parameter name="org" type="int" sql-name="@org" required="true"/>
-        </select>
+        <select owner="stb" sql-name="Period"/>
+        
+        <property name="xid"/>
+        <property name="id" key="true" type="int"/>
         
         <property name="dateB" type="date" label="Дата начала"/>
         <property name="dateE" type="date" label="Дата окончания"/>
-        
-        <property name="name" label="Период"/>
-        
-        <role name="org" actor="stb-org"/>
         
     </concept>
     
@@ -101,6 +103,8 @@
     
     <concept name="stb-db">
         
+        <select owner="stb" sql-name="Db"/>
+        
         <property name="xid"/>
         <property name="id" key="true" type="int"/>
         
@@ -114,8 +118,9 @@
     
     <concept name="stb-accrual" label="Начисление">
         
-        <select owner="stb" sql-name="accuralByPeriod" type="procedure">
-            <parameter name="stb-period" sql-name="@period" type="int" required="true"/>
+        <select owner="stb" sql-name="accrualByDates" type="procedure">
+            <parameter name="dateB" sql-name="@dateB" type="date" required="true"/>
+            <parameter name="dateE" sql-name="@dateE" type="date" required="true"/>
         </select>
         
         <property name="xid"/>
@@ -135,6 +140,8 @@
     </concept>
     
     <concept name="stb-usage">
+        
+        <select owner="stb" sql-name="Usage"/>
         
         <property name="xid"/>
         <property name="id" key="true" type="int"/>

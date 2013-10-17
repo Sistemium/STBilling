@@ -22,6 +22,8 @@
 					
 					<order-by name="dateB" dir="desc"/>
 					
+					<field name="id"/>
+					
 					<field name="dateB"/>
 					<field name="dateE"/>
 					
@@ -32,26 +34,30 @@
 			<form name="stb-period-detailed" concept="stb-period">
 				
 				<parameter name="period-to-detail-id" type="int" property="id" modifiable="true"/>
+				<parameter name="period-to-detail-org" type="int" modifiable="true"/>
 				
 				<field name="dateB"/>
 				<field name="dateE"/>
 				
-				<form name="stb-contract-tariff" is-set="true">
+				<form name="stb-tariff" is-set="true">
 					
 					<field name="price"/>
 					
-					<form name="stb-period-detailed-service" concept="stb-service">
+					<join name="stb-period-detailed" field="period-to-detail-org" property="org"/>
+					
+					<form name="stb-service" concept="stb-service">
 						
 						<field name="name"/>
 						
 						<form name="stb-period-detailed-accural" concept="stb-accrual">
 							
-							<join name="stb-period-detailed"/>
+							<join name="stb-period-detailed" field="dateB"/>
+							<join name="stb-period-detailed" field="dateE"/>
 							
 							<field name="volume" aggregate="sum"/>
-							<field name="cost" type="decimal" sql-compute="null">
+							<field name="cost" type="decimal" sql-compute="null" label="Стоимость">
 								<xpath-compute>
-									ancestor::xi:data [@name='stb-contract-tariff'] /xi:datum [@name='price']
+									ancestor::xi:data [@name='stb-tariff'] /xi:datum [@name='price']
 									* preceding-sibling::xi:datum [@name='volume']
 								</xpath-compute>
 							</field>
@@ -91,19 +97,14 @@
 				
 				<print form="stb-period-detailed" field="*"/>
 				
-				<region class="tabs">
-					<region label="Начисления">
-						
-						<grid form="stb-period-detailed-service"/>
-						
-					</region>
-					<region label="Использование">
-						
-						<grid form="stb-period-detailed-usage"/>
-						
-					</region>
-				</region>
-				
+				<grid form="stb-period-detailed-accural" label="Начисления">
+					<columns>
+						<column form="stb-service" field="name"/>
+						<column form="stb-tariff" field="price"/>
+						<column field="volume"/>
+						<column field="cost"/>
+					</columns>
+				</grid>
 				
             </display>
 			
@@ -113,6 +114,7 @@
 			
             <option name="period-detail-button" label="...">
                 <command name="period-to-detail-id" xpath-compute="xi:datum[@name='id']"/>
+                <command name="period-to-detail-org" xpath-compute="ancestor::xi:data[@name='Billing']/xi:datum[@name='id']"/>
 				<command name="stb-org-dashboard">detail-step</command>
             </option>
 			

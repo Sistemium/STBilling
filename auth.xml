@@ -8,10 +8,12 @@
         <role name="admin"/>
         <role name="customer"/>
         <role name="billing"/>
+        <role name="org"/>
     </roles>
 
     <user name="sasha">
         <role ref="admin"/>
+        <role ref="org">unact</role>
     </user>
     
     <validator name="uoauth" username-role="system-username">

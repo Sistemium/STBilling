@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<view-definition xmlns="http://unact.net/xml/xi" name="stb-services" label="Каталог услуг">
+	
+    <view-schema>
+        <form name="ST">
+			
+            <parameter name="name">
+                <init with="username"/>
+            </parameter>
+			
+            <parameter name="org">
+                <init with="role">org</init>
+            </parameter>
+			
+			<form name="stb-services" is-set="true" concept="stb-service" extendable="true" deletable="true">
+				
+				<field name="id"/>
+				<field name="xid"/>
+				
+				<field name="name" editable="true"/>
+				
+			</form>
+            
+        </form>
+        
+    </view-schema>
+    
+    <workflow>
+		
+        <step name="index-step">
+			
+            <display>
+				
+				<grid form="stb-services"/>
+				
+            </display>
+            
+        </step>
+        
+    </workflow>
+    
+</view-definition>
