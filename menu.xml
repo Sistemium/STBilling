@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<context-extension xmlns="http://unact.net/xml/xi" label="Sitemium UAB">
+    
+    <menu name="sales" label="Административное" directory="views">
+        <access role="admin"/>
+    </menu>
+    
+</context-extension>

@@ -7,6 +7,8 @@
 
     <concept name="stb-org">
         
+        <select owner="stb" sql-name="Org" />
+        
         <property name="xid"/>
         <property name="id" key="true" type="int"/>
         
@@ -26,11 +28,14 @@
         <property name="name" label="Название" sql-compute="string(ndoc, ' от ', [date]"/>
         
         <role name="org" actor="stb-org"/>
-        <role name="tariff" actor="stb-tariff"/>
         
     </concept>
     
-    <concept name="stb-tariff">
+    <concept name="stb-contract-tariff">
+        
+        <select owner="stb" sql-name="period" type="procedure">
+            <parameter name="stb-period" sql-name="@period" type="int"/>
+        </select>
         
         <property name="xid"/>
         <property name="id" key="true" type="int"/>
@@ -39,6 +44,7 @@
         
         <role name="contract" actor="stb-contract"/>
         <role name="service" actor="stb-service"/>
+        <role name="stb-period" actor="stb-period"/>
         
     </concept>
     
@@ -51,17 +57,20 @@
         
     </concept>
     
-    <!--concept name="stb-period">
+    <concept name="stb-period">
         
-        <property name="xid"/>
-        <property name="id" key="true" type="int"/>
+        <select type="procedure" owner="stb" sql-name="periodByOrg">
+            <parameter name="org" type="int" sql-name="@org" required="true"/>
+        </select>
         
         <property name="dateB" type="date" label="Дата начала"/>
         <property name="dateE" type="date" label="Дата окончания"/>
         
         <property name="name" label="Период"/>
         
-    </concept-->
+        <role name="org" actor="stb-org"/>
+        
+    </concept>
     
     <concept name="stb-invoice">
         
@@ -105,6 +114,10 @@
     
     <concept name="stb-accrual" label="Начисление">
         
+        <select owner="stb" sql-name="accuralByPeriod" type="procedure">
+            <parameter name="stb-period" sql-name="@period" type="int" required="true"/>
+        </select>
+        
         <property name="xid"/>
         <property name="id" key="true" type="int"/>
         
@@ -116,6 +129,8 @@
         
         <role name="org" actor="stb-org"/>
         <role name="service" actor="stb-service"/>
+        
+        <role name="stb-period" actor="stb-period"/>
         
     </concept>
     

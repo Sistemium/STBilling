@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<authorization xmlns="http://unact.net/xml/xi">
+
+    <roles>
+        <role name="user"/>
+        <role name="local-user"/>
+        <role name="uoauth-user"/>
+        <role name="admin"/>
+        <role name="customer"/>
+        <role name="billing"/>
+    </roles>
+
+    <user name="sasha">
+        <role ref="admin"/>
+    </user>
+    
+    <validator name="uoauth" username-role="system-username">
+        <role ref="uoauth-user"/>
+        <role ref="user"/>
+    </validator>
+    
+    <validator name="1" username-role="system-username">
+        <role ref="local-user"/>
+        <role ref="user"/>
+    </validator>
+    
+</authorization>

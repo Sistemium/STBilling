@@ -1,0 +1,127 @@
+<?xml version="1.0"?>
+<view-definition xmlns="http://unact.net/xml/xi" name="stb-org-dashboard" label="Биллинг по организации">
+	
+    <view-schema>
+        <form name="ST">
+			
+            <parameter name="name">
+                <init with="username"/>
+            </parameter>
+			
+            <parameter name="org">
+                <init with="role">org</init>
+            </parameter>
+			
+			<form name="Billing" concept="stb-org">
+				
+				<join name="sysuser" field="org" property="name"/>
+				
+				<field name="id"/>
+				
+				<form name="stb-period" is-set="true" page-size="10">
+					
+					<order-by name="dateB" dir="desc"/>
+					
+					<field name="dateB"/>
+					<field name="dateE"/>
+					
+				</form>
+				
+			</form>
+			
+			<form name="stb-period-detailed" concept="stb-period">
+				
+				<parameter name="period-to-detail-id" type="int" property="id" modifiable="true"/>
+				
+				<field name="dateB"/>
+				<field name="dateE"/>
+				
+				<form name="stb-contract-tariff" is-set="true">
+					
+					<field name="price"/>
+					
+					<form name="stb-period-detailed-service" concept="stb-service">
+						
+						<field name="name"/>
+						
+						<form name="stb-period-detailed-accural" concept="stb-accrual">
+							
+							<join name="stb-period-detailed"/>
+							
+							<field name="volume" aggregate="sum"/>
+							<field name="cost" type="decimal" sql-compute="null">
+								<xpath-compute>
+									ancestor::xi:data [@name='stb-contract-tariff'] /xi:datum [@name='price']
+									* preceding-sibling::xi:datum [@name='volume']
+								</xpath-compute>
+							</field>
+							
+						</form>
+						
+					</form>
+					
+				</form>
+				
+			</form>
+			
+        </form>
+    </view-schema>
+	
+    <workflow>
+		
+        <step name="index-step" label="Выбор периода">
+			
+            <display>
+				
+				<grid form="stb-period">
+					<option reuse="period-detail-button"/>
+				</grid>
+				
+            </display>
+            
+        </step>
+		
+        <step name="detail-step" label="Детали периода" hidden="true">
+			
+            <options>
+				<option reuse="to-index"/>
+            </options>
+			
+            <display>
+				
+				<print form="stb-period-detailed" field="*"/>
+				
+				<region class="tabs">
+					<region label="Начисления">
+						
+						<grid form="stb-period-detailed-service"/>
+						
+					</region>
+					<region label="Использование">
+						
+						<grid form="stb-period-detailed-usage"/>
+						
+					</region>
+				</region>
+				
+				
+            </display>
+			
+        </step>
+		
+		<reusables>
+			
+            <option name="period-detail-button" label="...">
+                <command name="period-to-detail-id" xpath-compute="xi:datum[@name='id']"/>
+				<command name="stb-org-dashboard">detail-step</command>
+            </option>
+			
+            <option name="to-index" label="К выбору периода">
+				<command name="stb-org-dashboard">index-step</command>
+            </option>
+			
+		</reusables>
+		
+    </workflow>
+	
+</view-definition>
