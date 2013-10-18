@@ -50,12 +50,29 @@
 						
 						<field name="xid"/>
 						
-						<field name="price" editable="true"/>
+						<field name="price" editable="true" />
 						
 						<form name="stb-service" choise="stb-service-cache" label="Услуга" role="service">
 							<field name="id"/>
 							<field name="name"/>
 						</form>
+						
+					</form>
+					
+					<form name="stb-accrual" is-set="true" extendable="true" deletable="true" parent-sql-name="contract">
+						
+						<field name="xid"/>
+						
+						<form name="stb-accrual-service" choise="stb-service-cache" label="Услуга" role="service">
+							<field name="id"/>
+							<field name="name"/>
+						</form>
+						
+						<field name="volume" editable="true">
+							<init with="const">1</init>
+						</field>
+						
+						<field name="description" editable="true" />
 						
 					</form>
 					
@@ -117,7 +134,8 @@
 				
 				<print form="stb-contract-detailed" field="*"/>
 				
-				<region class="tabs-">
+				<region class="tabs">
+					<grid form="stb-accrual" label="Начисления"/>
 					<grid form="stb-tariff" label="Тарификция"/>
 				</region>
 				

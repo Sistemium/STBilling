@@ -12,11 +12,7 @@
                 <init with="role">org</init>
             </parameter>
 			
-			<form name="Billing" concept="stb-org">
-				
-				<join name="sysuser" field="org" property="name"/>
-				
-				<field name="id"/>
+			<form name="Billing" concept="ST">
 				
 				<form name="stb-period" is-set="true" page-size="10">
 					
@@ -34,38 +30,47 @@
 			<form name="stb-period-detailed" concept="stb-period">
 				
 				<parameter name="period-to-detail-id" type="int" property="id" modifiable="true"/>
-				<parameter name="period-to-detail-org" type="int" modifiable="true"/>
 				
 				<field name="dateB"/>
 				<field name="dateE"/>
 				
-				<form name="stb-tariff" is-set="true">
+				<form name="stb-contract">
 					
-					<field name="price"/>
+					<field name="name" label="Договор"/>
 					
-					<join name="stb-period-detailed" field="period-to-detail-org" property="org"/>
+					<form name="stb-org">
+						<join name="ST" field="org" property="name" optional="true"/>						
+						<field name="id"/>
+						<field name="name" label="Организация"/>
+					</form>
 					
-					<form name="stb-service" concept="stb-service">
+					<form name="stb-tariff" is-set="true">
 						
-						<field name="name"/>
+						<field name="price"/>
 						
-						<form name="stb-period-detailed-accural" concept="stb-accrual">
+						<form name="stb-service" concept="stb-service">
 							
-							<join name="stb-period-detailed" field="dateB"/>
-							<join name="stb-period-detailed" field="dateE"/>
+							<field name="name" label="Услуга"/>
 							
-							<field name="volume" aggregate="sum"/>
-							<field name="cost" type="decimal" sql-compute="null" label="Стоимость">
-								<xpath-compute>
-									ancestor::xi:data [@name='stb-tariff'] /xi:datum [@name='price']
-									* preceding-sibling::xi:datum [@name='volume']
-								</xpath-compute>
-							</field>
+							<form name="stb-invoice-item">
+								
+								<join name="stb-period-detailed" field="dateB"/>
+								<join name="stb-period-detailed" field="dateE"/>
+								<join name="stb-contract"/>
+								
+								<field name="volume" aggregate="sum"/>
+								<field name="cost" type="decimal" sql-compute="null" label="Стоимость">
+									<xpath-compute>
+										ancestor::xi:data [@name='stb-tariff'] /xi:datum [@name='price']
+										* preceding-sibling::xi:datum [@name='volume']
+									</xpath-compute>
+								</field>
+								
+							</form>
 							
 						</form>
 						
 					</form>
-					
 				</form>
 				
 			</form>
@@ -95,16 +100,22 @@
 			
             <display>
 				
-				<print form="stb-period-detailed" field="*"/>
+				<region label="Период" class="block">
+					<print form="stb-period-detailed" field="*"/>
+				</region>
 				
-				<grid form="stb-period-detailed-accural" label="Начисления">
-					<columns>
-						<column form="stb-service" field="name"/>
-						<column form="stb-tariff" field="price"/>
-						<column field="volume"/>
-						<column field="cost"/>
-					</columns>
-				</grid>
+				<for-each form="stb-contract" class="block">
+					<print form="stb-org" field="name" class="title"/>
+					<print form="stb-contract" field="name"/>
+					<grid form="stb-invoice-item" label="Начисления">
+						<columns>
+							<column form="stb-service" field="name"/>
+							<column field="volume"/>
+							<column form="stb-tariff" field="price"/>
+							<column field="cost"/>
+						</columns>
+					</grid>
+				</for-each>
 				
             </display>
 			

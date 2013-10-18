@@ -18,6 +18,11 @@ ch.defineEntity 'Tariff',
     @roles = 'Contract:Service'
 ;
 
+ch.defineEntity 'Accrual',
+    @properties = 'date:volume:description:href:acceptanceDate',
+    @roles = 'Contract:Service'
+;
+
 ch.createTable @entity = 'Contract',
     @owner = 'stb', @isTemporary = 0, @forseDrop = 0
 ;
@@ -31,5 +36,9 @@ ch.createTable @entity = 'Period',
 ;
 
 ch.createTable @entity = 'Tariff',
+    @owner = 'stb', @isTemporary = 0, @forseDrop = 0
+;
+
+ch.createTable @entity = 'Accrual',
     @owner = 'stb', @isTemporary = 0, @forseDrop = 0
 ;

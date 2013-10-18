@@ -20,6 +20,9 @@
     <concept name="stb-contract">
         
         <select owner="stb" sql-name="Contract"/>
+        <select owner="stb" sql-name="ContractByPeriod" type="procedure">
+            <parameter name="stb-period" type="int" required="true" sql-name="@period"/>
+        </select>
         <save owner="stb" sql-name="Contract"/>
         
         <property name="xid"/>
@@ -32,6 +35,7 @@
         <property name="name" label="Название" sql-compute="string(ndoc, ' от ', [dateB])"/>
         
         <role name="org" actor="stb-org"/>
+        <role name="stb-period" actor="stb-period"/>
         
     </concept>
     
@@ -89,6 +93,11 @@
     
     <concept name="stb-invoice-item">
         
+        <select owner="stb" sql-name="invoiceItemByDates" type="procedure">
+            <parameter name="dateB" sql-name="@dateB" type="date" required="true"/>
+            <parameter name="dateE" sql-name="@dateE" type="date" required="true"/>
+        </select>
+        
         <property name="xid"/>
         <property name="id" key="true" type="int"/>
         
@@ -98,6 +107,8 @@
         
         <role name="invoice" actor="stb-invoice"/>
         <role name="service" actor="stb-service"/>
+        
+        <role name="contract" actor="stb-contract"/>
         
     </concept>
     
@@ -118,24 +129,21 @@
     
     <concept name="stb-accrual" label="Начисление">
         
-        <select owner="stb" sql-name="accrualByDates" type="procedure">
-            <parameter name="dateB" sql-name="@dateB" type="date" required="true"/>
-            <parameter name="dateE" sql-name="@dateE" type="date" required="true"/>
-        </select>
+        <select owner="stb" sql-name="Accrual"/>
         
         <property name="xid"/>
         <property name="id" key="true" type="int"/>
         
-        <property name="issue-href" label="Техзадание"/>
+        <property name="date" type="date" label="Дата создания"/>
         <property name="volume" type="int" label="Кол-во"/>
+        
         <property name="description" label="Описание"/>
+        <property name="href" label="Ссылка на техзадание"/>
         
         <property name="acceptance-date" type="date" label="Дата приемки"/>
         
-        <role name="org" actor="stb-org"/>
         <role name="service" actor="stb-service"/>
-        
-        <role name="stb-period" actor="stb-period"/>
+        <role name="contract" actor="stb-contract"/>
         
     </concept>
     

@@ -1,3 +1,5 @@
+create domain PRICE decimal (18,2) not null;
+
 ch.defineProperties
     'date,date'
     + ':syncedUpTo,datetime'
@@ -16,5 +18,12 @@ ch.defineProperties
     'dateB,date'
     + ':dateE,date'
     + ':ndoc,string'
-    + ':price,decimal'
+    + ':price,PRICE'
+;
+
+ch.defineProperties
+    'description,text'
+    + ':volume,int'
+    + ':href,string'
+    + ':acceptanceDate,date'
 ;

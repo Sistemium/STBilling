@@ -1,4 +1,4 @@
-create or replace procedure stb.accrualByDates (
+create or replace procedure stb.invoiceItemByDates (
     @dateB date default dateadd(day, 1-day(today()), today()),
     @dateE date default today()
 ) begin
