@@ -4,14 +4,17 @@ create or replace procedure stb.invoiceItemByDates (
 ) begin
 
     select
-        c.id as [contract],
-        count(distinct username) as [volume],
-        1 as [service]
-    from stb.usage join stb.db on db = usage.db
-        join stb.Contract c
-            on usage.[date] between c.dateB and c.dateE
-                and c.org = db.org
-    where usage.[date] between @dateB and @dateE
-    group by c.id
+        [contract],
+        1 as [service],
+        count(distinct username) as [volume]
+    from stb.UsageByDates (@dateB,@dateE)
+    group by [contract], [service]
+    
+    union all select
+        [contract],
+        [service],
+        sum(volume) as [volume]
+    from stb.AccrualByDates (@dateB,@dateE)
+    group by [contract], [service]
 
 end;

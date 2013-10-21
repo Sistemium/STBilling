@@ -36,9 +36,19 @@
 				
 				<form name="stb-contract">
 					
+					<field name="id"/>
 					<field name="name" label="Договор"/>
 					
-					<form name="stb-org">
+					<field name="period-total-cost" label="Итого за период" sql-compute="null" type="decimal">
+						<xpath-compute>
+							sum(dyn:map(
+								../descendant::xi:data[@name='stb-invoice-item']/xi:datum[@name='cost']
+								,'dyn:evaluate(@xpath-compute)'
+							))
+						</xpath-compute>
+					</field>
+					
+					<form name="stb-org" constrain-parent="true">
 						<join name="ST" field="org" property="name" optional="true"/>						
 						<field name="id"/>
 						<field name="name" label="Организация"/>
@@ -58,7 +68,7 @@
 								<join name="stb-period-detailed" field="dateE"/>
 								<join name="stb-contract"/>
 								
-								<field name="volume" aggregate="sum"/>
+								<field name="volume"/>
 								<field name="cost" type="decimal" sql-compute="null" label="Стоимость">
 									<xpath-compute>
 										ancestor::xi:data [@name='stb-tariff'] /xi:datum [@name='price']
@@ -71,6 +81,47 @@
 						</form>
 						
 					</form>
+					
+					<form name="stb-usage-detailed" concept="stb-usage" preload="true" is-set="true">
+						
+						<join name="stb-period-detailed" field="dateB"/>
+						<join name="stb-period-detailed" field="dateE"/>
+						
+						<field name="username"/>
+						<field name="program"/>
+						<field name="path"/>
+						<field name="cnt"/>
+						
+					</form>
+					
+					<form name="stb-accrual-detailed" concept="stb-accrual" preload="true" is-set="true">
+						
+						<join name="stb-period-detailed" field="dateB"/>
+						<join name="stb-period-detailed" field="dateE"/>
+						
+						<order-by name="date" dir="desc"/>
+						
+						<field name="id"/>
+						
+						<field name="date"/>
+						<field name="acceptanceDate"/>
+						
+						<form name="stb-accrual-detailed-service" concept="stb-service"
+							label="Услуга" role="service"
+						>
+							<field name="id"/>
+							<field name="name"/>
+						</form>
+						
+						<field name="volume">
+							<init with="const">1</init>
+						</field>
+						
+						<field name="description" />
+						<field name="href" format="href"/>
+						
+					</form>
+					
 				</form>
 				
 			</form>
@@ -105,8 +156,11 @@
 				</region>
 				
 				<for-each form="stb-contract" class="block">
+					
 					<print form="stb-org" field="name" class="title"/>
 					<print form="stb-contract" field="name"/>
+					<print form="stb-contract" field="period-total-cost"/>
+					
 					<grid form="stb-invoice-item" label="Начисления">
 						<columns>
 							<column form="stb-service" field="name"/>
@@ -115,11 +169,84 @@
 							<column field="cost"/>
 						</columns>
 					</grid>
+					
+					<options>
+						<option label="Детализация пользователей">
+							<command name="set-of-stb-usage-detailed">refresh</command>
+							<command name="stb-org-dashboard">usage-detail-step</command>
+						</option>
+						<option label="Детализация доработок">
+							<command name="set-of-stb-accrual-detailed">refresh</command>
+							<command name="stb-org-dashboard">accrual-detail-step</command>
+						</option>
+					</options>
+					
 				</for-each>
 				
             </display>
 			
         </step>
+		
+        <step name="usage-detail-step" label="Пользовательская активность" hidden="true">
+			
+            <options>
+				<option label="К деталям периода">
+					<command name="stb-org-dashboard">detail-step</command>
+				</option>
+            </options>
+			
+            <display>
+				
+				<region class="hbox">
+					<print form="stb-org" field="name"/>
+					<print form="stb-contract" field="name" label="Договор"/>
+					<print form="stb-period-detailed" field="dateB" label="Период с"/>
+					<print form="stb-period-detailed" field="dateE" label="по"/>
+				</region>
+				
+				<grid form="stb-usage-detailed">
+					
+				</grid>
+				
+			</display>
+			
+		</step>
+		
+        <step name="accrual-detail-step" label="Начисления по доработкам" hidden="true">
+			
+            <options>
+				<option label="К деталям периода">
+					<command name="stb-org-dashboard">detail-step</command>
+				</option>
+            </options>
+			
+            <display>
+				
+				<region class="hbox">
+					<print form="stb-org" field="name"/>
+					<print form="stb-contract" field="name" label="Договор"/>
+					<print form="stb-period-detailed" field="dateB" label="Период с"/>
+					<print form="stb-period-detailed" field="dateE" label="по"/>
+				</region>
+				
+				<grid form="stb-accrual-detailed">
+					<columns>
+						<column label="Дата">
+							<print field="date" label="Создано"/>
+							<print field="acceptanceDate" label="Решено"/>
+						</column>
+						<column form="stb-accrual-service"/>
+						<column field="volume"/>
+						<column label="Описание">
+							<print field="href" label="ТЗ"/>
+							<print field="description" label=""/>
+						</column>
+					</columns>
+				</grid>
+				
+			</display>
+			
+		</step>
 		
 		<reusables>
 			

@@ -46,7 +46,9 @@
 					<field name="id"/>
 					<add-labeled-fields/>
 					
-					<form name="stb-tariff" is-set="true" extendable="true" deletable="true" parent-sql-name="contract">
+					<form name="stb-tariff" is-set="true" extendable="true" deletable="true"
+						parent-sql-name="contract"
+					>
 						
 						<field name="xid"/>
 						
@@ -59,11 +61,44 @@
 						
 					</form>
 					
-					<form name="stb-accrual" is-set="true" extendable="true" deletable="true" parent-sql-name="contract">
+					<form name="stb-accrual-detailed" concept="stb-accrual" parent-sql-name="contract">
 						
 						<field name="xid"/>
 						
-						<form name="stb-accrual-service" choise="stb-service-cache" label="Услуга" role="service">
+						<parameter name="accrual-to-detail-id" type="int" property="id" modifiable="true"/>
+						
+						<field name="date" editable="true"/>
+						<field name="acceptanceDate" editable="true"/>
+						
+						<form name="stb-accrual-detailed-service" concept="stb-service"
+							choise="stb-service-cache" label="Услуга" role="service"
+						>
+							<field name="id"/>
+							<field name="name"/>
+						</form>
+						
+						<field name="href" editable="true" format="href"/>
+						<field name="description" editable="true" />
+						
+						<field name="volume" editable="true"/>
+						
+					</form>
+					
+					<form name="stb-accrual" is-set="true" extendable="true" deletable="true"
+						parent-sql-name="contract" toggle-edit-off="true"
+					>
+						
+						<order-by name="date" dir="desc"/>
+						
+						<field name="xid"/>
+						<field name="id"/>
+						
+						<field name="date" editable="true"/>
+						<field name="acceptanceDate" editable="true"/>
+						
+						<form name="stb-accrual-service" concept="stb-service"
+							choise="stb-service-cache" label="Услуга" role="service"
+						>
 							<field name="id"/>
 							<field name="name"/>
 						</form>
@@ -73,6 +108,7 @@
 						</field>
 						
 						<field name="description" editable="true" />
+						<field name="href" editable="true" format="href"/>
 						
 					</form>
 					
@@ -132,10 +168,26 @@
 			
             <display>
 				
-				<print form="stb-contract-detailed" field="*"/>
+				<region class="hbox">
+					<print form="stb-contract-detailed" field="*"/>
+				</region>
 				
 				<region class="tabs">
-					<grid form="stb-accrual" label="Начисления"/>
+					<grid form="stb-accrual" label="Начисления">
+						<option reuse="accrual-detail-button"/>
+						<columns>
+							<column label="Дата">
+								<input field="date" label="Создано"/>
+								<input field="acceptanceDate" label="Решено"/>
+							</column>
+							<column form="stb-accrual-service"/>
+							<column field="volume"/>
+							<column label="Описание">
+								<input field="href" label="ТЗ"/>
+								<input field="description" label=""/>
+							</column>
+						</columns>
+					</grid>
 					<grid form="stb-tariff" label="Тарификция"/>
 				</region>
 				
@@ -144,7 +196,36 @@
 			
         </step>
 		
+        <step name="accrual-detail-step" label="Редактор Начисления" hidden="true">
+			
+            <options>
+				<option label="Отмена" reuse="to-contract-detail"/>
+				<option label="Сохранить" reuse="to-contract-detail">
+					<command name="stb-accrual-detailed">save</command>
+					<command name="set-of-stb-accrual">refresh</command>
+				</option>
+            </options>
+			
+            <display>
+				
+				<print form="stb-org-detailed" field="name" label="Организация"/>
+				<print form="stb-contract-detailed" field="name" label="Договор"/>
+				
+				<region label="Начисление услуги">
+					<input form="stb-accrual-detailed-service"/>
+					<input form="stb-accrual-detailed" field="*"/>
+				</region>
+				
+            </display>
+			
+        </step>
+		
 		<reusables>
+			
+            <option name="accrual-detail-button" label="...">
+                <command name="accrual-to-detail-id" xpath-compute="xi:datum[@name='id']"/>
+				<command name="stb-orgs">accrual-detail-step</command>
+            </option>
 			
             <option name="contract-detail-button" label="...">
                 <command name="contract-to-detail-id" xpath-compute="xi:datum[@name='id']"/>
@@ -162,6 +243,10 @@
 			
             <option name="to-detail" label="К деталям Организации">
 				<command name="stb-orgs">detail-step</command>
+            </option>
+			
+            <option name="to-contract-detail" label="К списку начислений">
+				<command name="stb-orgs">contract-detail-step</command>
             </option>
 			
 		</reusables>

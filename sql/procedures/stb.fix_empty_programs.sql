@@ -10,4 +10,11 @@ begin
         and program is null
     ;
 
+    update stb.usage set
+            program = 'expeditioning',
+            path = '/XML3/'
+        where path is null
+        and program is null
+    ;
+    
 end;

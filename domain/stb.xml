@@ -131,16 +131,23 @@
         
         <select owner="stb" sql-name="Accrual"/>
         
+        <select owner="stb" sql-name="AccrualByDates" type="procedure">
+            <parameter name="dateB" sql-name="@dateB" type="date" required="true"/>
+            <parameter name="dateE" sql-name="@dateE" type="date" required="true"/>
+        </select>
+        
+        <save owner="stb" sql-name="Accrual"/>
+        
         <property name="xid"/>
         <property name="id" key="true" type="int"/>
         
         <property name="date" type="date" label="Дата создания"/>
         <property name="volume" type="int" label="Кол-во"/>
         
-        <property name="description" label="Описание"/>
-        <property name="href" label="Ссылка на техзадание"/>
+        <property name="description" label="Описание" type="text"/>
+        <property name="href" label="Ссылка на техзадание" type="string"/>
         
-        <property name="acceptance-date" type="date" label="Дата приемки"/>
+        <property name="acceptanceDate" type="date" label="Дата приемки"/>
         
         <role name="service" actor="stb-service"/>
         <role name="contract" actor="stb-contract"/>
@@ -150,6 +157,10 @@
     <concept name="stb-usage">
         
         <select owner="stb" sql-name="Usage"/>
+        <select owner="stb" sql-name="UsageByDates" type="procedure">
+            <parameter name="dateB" sql-name="@dateB" type="date" required="true"/>
+            <parameter name="dateE" sql-name="@dateE" type="date" required="true"/>
+        </select>
         
         <property name="xid"/>
         <property name="id" key="true" type="int"/>
@@ -163,6 +174,7 @@
         
         <role name="db" actor="stb-db"/>
         <role name="service" actor="stb-service"/>
+        <role name="contract" actor="stb-contract"/>
         
     </concept>
     
