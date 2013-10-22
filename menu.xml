@@ -2,8 +2,8 @@
 
 <context-extension xmlns="http://unact.net/xml/xi" label="Sitemium UAB">
     
-    <menu name="sales" label="Административное" directory="views">
-        <access role="admin"/>
+    <menu name="sales" label="Клиентский учет" directory="views">
+        <access role="st.com.client"/>
     </menu>
     
 </context-extension>

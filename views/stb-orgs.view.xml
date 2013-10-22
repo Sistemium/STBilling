@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <view-definition xmlns="http://unact.net/xml/xi" name="stb-orgs" label="Каталог организаций">
 	
+	<access role="admin"/>
+	
     <view-schema>
         <form name="ST">
 			

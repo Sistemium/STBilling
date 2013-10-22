@@ -6,13 +6,14 @@
         <role name="local-user"/>
         <role name="uoauth-user"/>
         <role name="admin"/>
-        <role name="customer"/>
+        <role name="st.com.client"/>
         <role name="billing"/>
         <role name="org"/>
     </roles>
 
     <user name="sasha">
         <role ref="admin"/>
+        <role ref="st.com.client"/>
         <role ref="org">unact</role>
     </user>
     
