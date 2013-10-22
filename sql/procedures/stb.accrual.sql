@@ -40,8 +40,11 @@ create or replace procedure stb.usageByDates (
             on Db.id = Usage.db
         join stb.Contract c
             on c.org = Db.org and Usage.[date] between c.dateB and c.dateE
+        left join stb.[User] u on u.name = Usage.username
     where Usage.[date] between @dateB and @dateE
-        and username is not null
+        and Usage.username is not null
+        and u.price is null
+        and Usage.path not like '%~%'
     group by [contract], [username]
     
 end;
