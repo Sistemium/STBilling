@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<view-definition xmlns="http://unact.net/xml/xi" name="Agent_view" label="Пользователи">
+	
+    <access role="admin"/>
+	
+    <view-schema><form name="PHA">
+		
+		<parameter name="name">
+			<init with="username"/>
+		</parameter>
+		
+		<form name="Agent" is-set="true" extendable="true" deletable="true" label="Агенты" page-size="20">
+			
+			<field name="id" label="ИД"/>
+			<field name="name" editable="true"/>
+			<field name="org" editable="true"/>
+			<field name="mobile-number" editable="true"/>
+			<field name="program-url" editable="true"/>
+			<field name="billing_name" editable="true"/>
+			
+			<form name="salesman" concept="Salesman" choise="Salesman-cache" label="Торговый представитель">
+				
+				<field name="id"/>
+				<field name="name" label="Торговый представитель"/>
+				
+			</form>
+			
+		</form>
+		
+		<form concept="Salesman" name="Salesman-cache" is-set="true">
+			
+			<field name="id"/>
+			<field name="name"  label="Торговый представитель"/>
+			
+		</form>
+		
+    </form></view-schema>
+	
+    <workflow>
+        <step>
+            <display>
+				
+                <grid form="Agent"/>
+				
+            </display>
+        </step>
+    </workflow>
+	
+</view-definition>

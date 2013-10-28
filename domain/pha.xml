@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<domain version="1.0"
+    xmlns="http://unact.net/xml/xi"
+    server="pha"
+>
+
+    <concept name="PHA">
+        
+        <select owner="sys" sql-name="dummy"/>
+        
+    </concept>
+    
+    <concept name="Agent">
+        <select owner="bs" sql-name="Agent"/>
+        
+        <save owner="bs" sql-name="Agent"/>
+        
+        <property name="id" type="int" key="true"/>
+        <property name="xid"/>
+        <property name="name" type="string" label="Название"/>
+        <property name="org" type="string" label="Организация"/>
+        <property name="billing_name" type="string" label="Название в счете"/>
+        <property name="mobile-number" type="string" label="Сотовый номер" sql-name="mobile_number"/>
+        <property name="program-url" type="string" label="Инстанс" sql-name="program_url"/>
+        
+        <role name="salesman" actor="Salesman"/>
+        
+    </concept>
+    
+    <concept name="Salesman">
+        <select owner="bs" sql-name="Salesman"/>
+        
+        <save owner="bs" sql-name="Salesman"/>
+        
+        <property name="id" type="int" key="true"/>
+        <property name="xid"/>
+        <property name="name" type="string" label="Название"/>
+        
+    </concept>
+    
+</domain>
