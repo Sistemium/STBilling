@@ -34,7 +34,8 @@ create or replace procedure stb.usageByDates (
         [username],
         list (distinct program) [program],
         list (distinct path) [path],
-        sum(cnt) [cnt]
+        sum(cnt) [cnt],
+        count(distinct usage.[date]) [datesCnt]
     from stb.Usage
         join stb.Db
             on Db.id = Usage.db

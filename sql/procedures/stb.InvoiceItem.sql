@@ -8,6 +8,7 @@ create or replace procedure stb.invoiceItemByDates (
         1 as [service],
         count(distinct username) as [volume]
     from stb.UsageByDates (@dateB,@dateE)
+    where [datesCnt] > 1 and cnt >= 10
     group by [contract], [service]
     
     union all select
