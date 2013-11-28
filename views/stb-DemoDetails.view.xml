@@ -15,24 +15,38 @@
 			<init with="today"/>
 		</parameter>
 		
-		<form name="DemoStats" concept="stb-DemoStats"
-			is-set="true" label="Показатели активности пользователей"
-		>
+		<form name="stb-legalEntity" expect-choise="true">
 			
-			<field name="date"/>
-			<field name="cnt"/>
-			<field name="agentNames"/>
+			<field name="id"/>
+			<field name="name"/>
+			<field name="legalName" label="Заказчик"/>
 			
-			<join name="root" field="dateStart"/>
-			<join name="root" field="dateEnd"/>
+			<form name="stb-contract" expect-choise="true">
+				
+				<field name="id"/>
+				<field name="name" label="Договор"/>
+				
+			</form>
 			
+			<form name="DemoStats" concept="stb-DemoStats"
+				is-set="true" label="Показатели активности пользователей"
+			>
+				
+				<field name="date"/>
+				<field name="cnt"/>
+				<field name="agentNames"/>
+				
+				<join name="root" field="dateStart"/>
+				<join name="root" field="dateEnd"/>
+				
+			</form>
+			
+			<field name="DemoStats-count" type="int" label="Итого дней активности" sql-compute="null">
+				<xpath-compute>
+					count(../xi:set-of[@name='set-of-DemoStats']/xi:data)
+				</xpath-compute>
+			</field>
 		</form>
-		
-		<field name="DemoStats-count" type="int" label="Итого дней активности" sql-compute="null">
-			<xpath-compute>
-				count(../xi:set-of[@name='set-of-DemoStats']/xi:data)
-			</xpath-compute>
-		</field>
 		
     </form></view-schema>
 	
@@ -42,9 +56,11 @@
 				
 				<region class="hbox">
 					<region class="vbox">
+						<print form="stb-legalEntity" field="legalName"/>
 						<input field="dateStart"/>
 					</region>
 					<region class="vbox">
+						<print form="stb-contract" field="name"/>
 						<input field="dateEnd"/>
 					</region>
 				</region>
