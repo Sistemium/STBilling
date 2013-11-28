@@ -1,0 +1,180 @@
+<?xml version="1.0"?>
+<view-definition xmlns="http://unact.net/xml/xi" name="stb-agents" label="Пользователи">
+	
+    <view-schema>
+        <form name="ST">
+			
+            <parameter name="name">
+                <init with="username"/>
+            </parameter>
+			
+            <parameter name="org">
+                <init with="role">org</init>
+            </parameter>
+			
+			<form name="stb-agent-blank" concept="stb-agent" build-blank="true" new-only="true">
+				
+				<field name="xid"/>
+				
+				<field name="name" editable="true"/>
+				<field name="username" editable="true"/>
+				
+				<form name="stb-agent-blank-legalEntity" concept="stb-legalEntity" role="legalEntity"
+					choise="stb-legalEntity-cache" label="Юрлицо"
+				>
+					<field name="id"/>
+					<field name="name"/>
+				</form>
+				
+			</form>
+			
+			<form name="stb-agent-detailed" concept="stb-agent">
+				
+				<parameter name="agent-to-detail-id" type="int" property="id" modifiable="true"/>
+				
+				<field name="xid"/>
+				
+				<field name="name" editable="true"/>
+				<field name="username" editable="true"/>
+				
+				<form name="stb-agent-detailed-legalEntity" concept="stb-legalEntity" role="legalEntity"
+					choise="stb-legalEntity-cache" label="Юрлицо"
+				>
+					<field name="id"/>
+					<field name="name"/>
+				</form>
+				
+			</form>
+			
+			<form name="stb-agent" concept="stb-agent" is-set="true">
+				<field name="id"/>
+				<add-labeled-fields/>
+				<form name="stb-agent-legalEntity" concept="stb-legalEntity" role="legalEntity"
+					label="Юрлицо"
+				>
+					<field name="id"/>
+					<field name="name" label="Юрлицо"/>
+				</form>
+			</form>
+			
+			<form name="stb-org" is-set="true">
+				
+				<join name="ST" field="org" property="name" optional="true"/>
+				
+				<field name="id"/>
+				<field name="name"/>
+				
+				<form name="stb-legalEntity-cache" concept="stb-legalEntity" is-set="true">
+					<field name="id"/>
+					<field name="name"/>
+				</form>
+				
+			</form>
+			
+        </form>
+    </view-schema>
+	
+    <workflow>
+		
+        <step name="index-step" label="Выбор пользователя">
+			
+            <display>
+				
+				<options>
+					<option name="make-new-agent" label="Добавить агента">
+						<command name="stb-agents">agent-blank-step</command>
+					</option>
+				</options>
+				
+				<grid form="stb-agent">
+					<option reuse="agent-detail-button"/>
+				</grid>
+				
+            </display>
+            
+        </step>
+		
+        <step name="agent-detail-step" label="Детали пользователя" hidden="true">
+			
+            <options>
+				<option reuse="to-index"/>
+				<option reuse="generic-save">
+					<command name="stb-agent-detailed">save</command>
+				</option>
+            </options>
+			
+            <display>
+				
+				<input form="stb-agent-detailed" field="*"/>
+				<input form="stb-agent-detailed-legalEntity"/>
+				
+            </display>
+			
+        </step>
+		
+        <step name="agent-blank-step" label="Добавление пользователя" hidden="true">
+			
+            <options>
+				<option reuse="to-index"/>
+				<option reuse="generic-save">
+					<command name="stb-agent-blank">save</command>
+				</option>
+            </options>
+			
+            <display>
+				
+				<input form="stb-agent-blank" field="*"/>
+				<input form="stb-agent-blank-legalEntity"/>
+				
+            </display>
+			
+        </step>
+		
+        <!--step name="usage-detail-step" label="Пользовательская активность" hidden="true">
+			
+            <options>
+				<option label="К деталям пользователя">
+					<command name="stb-agents">detail-step</command>
+				</option>
+            </options>
+			
+            <display>
+				
+				<region class="hbox">
+					<print form="stb-org" field="name"/>
+					<print form="stb-contract" field="name" label="Договор"/>
+					<print form="stb-period-detailed" field="dateB" label="Период с"/>
+					<print form="stb-period-detailed" field="dateE" label="по"/>
+				</region>
+				
+				<grid form="stb-usage-detailed">
+					<group>
+						<by field="n50"/>
+					</group>
+				</grid>
+				
+			</display>
+			
+		</step-->
+		
+		<reusables>
+			
+            <option name="agent-detail-button" label="...">
+                <command name="agent-to-detail-id" xpath-compute="xi:datum[@name='id']"/>
+				<command name="stb-agents">agent-detail-step</command>
+            </option>
+			
+            <option name="to-index" label="К выбору пользователя">
+				<command name="stb-agents">index-step</command>
+            </option>
+			
+			<option name="generic-save" label="Сохранить">
+				<command name="set-of-stb-agent">refresh</command>
+				<command name="stb-agents">index-step</command>
+			</option>
+			
+		</reusables>
+		
+    </workflow>
+	
+</view-definition>

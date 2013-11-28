@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<view-definition xmlns="http://unact.net/xml/xi" name="stb-DemoDetails" label="Детализация демонстрации Системы">
+	
+    <view-schema><form name="root" concept="ST">
+		
+		<parameter name="name">
+			<init with="username"/>
+		</parameter>
+		
+		<parameter name="dateStart" type="date" editable="true" label="Начало периода">
+			<init with="today"/>
+		</parameter>
+		
+		<parameter name="dateEnd" type="date" editable="true" label="Конец периода">
+			<init with="today"/>
+		</parameter>
+		
+		<form name="DemoStats" concept="stb-DemoStats"
+			is-set="true" label="Показатели активности пользователей"
+		>
+			
+			<field name="date"/>
+			<field name="cnt"/>
+			<field name="agentNames"/>
+			
+			<join name="root" field="dateStart"/>
+			<join name="root" field="dateEnd"/>
+			
+		</form>
+		
+		<field name="DemoStats-count" type="int" label="Итого дней активности" sql-compute="null">
+			<xpath-compute>
+				count(../xi:set-of[@name='set-of-DemoStats']/xi:data)
+			</xpath-compute>
+		</field>
+		
+    </form></view-schema>
+	
+    <workflow>
+        <step>
+            <display>
+				
+				<region class="hbox">
+					<region class="vbox">
+						<input field="dateStart"/>
+					</region>
+					<region class="vbox">
+						<input field="dateEnd"/>
+					</region>
+				</region>
+				
+                <grid form="DemoStats"/>
+				
+				<print field="DemoStats-count"/>
+				
+            </display>
+        </step>
+    </workflow>
+	
+</view-definition>

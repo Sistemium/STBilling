@@ -8,6 +8,7 @@ ch.defineProperties
     + ':program,string'
     + ':path,string'
     + ':name,string'
+    + ':legalName,string'
     + ':cnt,int'
     + ':pem,string'
     + ':timezone,string'

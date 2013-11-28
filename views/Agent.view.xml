@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<view-definition xmlns="http://unact.net/xml/xi" name="Agent_view" label="Пользователи">
+<view-definition xmlns="http://unact.net/xml/xi" name="Agent_view" label="Пользователи PHA">
 	
     <access role="admin"/>
 	

@@ -178,4 +178,49 @@
         
     </concept>
     
+    <concept name="stb-agent">
+        
+        <select owner="stb" sql-name="Agent"/>
+        <save owner="stb" sql-name="Agent"/>
+        
+        <property name="xid"/>
+        <property name="id" key="true" type="int"/>
+        
+        <property name="name" label="Название"/>
+        <property name="username" label="Логин"/>
+        
+        <role name="legalEntity" actor="stb-legalEntity"/>
+        
+    </concept>
+    
+    <concept name="stb-legalEntity">
+        
+        <select owner="stb" sql-name="LegalEntity"/>
+        <save owner="stb" sql-name="LegalEntity"/>
+        
+        <property name="xid"/>
+        <property name="id" key="true" type="int"/>
+        
+        <property name="name" label="Название"/>
+        
+        <role name="org" actor="stb-org"/>
+        
+    </concept>
+    
+    <concept name="stb-DemoStats">
+        
+        <select owner="stb" sql-name="AgentStatsByDate" type="procedure">
+            <parameter name="dateStart" type="date" sql-name="@dateStart"/>
+            <parameter name="dateEnd" type="date" sql-name="@dateEnd"/>
+        </select>
+        
+        <property name="date" type="date" label="Дата"/>
+        <property name="cnt" type="int" label="Кол-во операций"/>
+        <property name="agentNames" label="Пользователи"/>
+        
+        <property name="dateStart" type="date" label="Дата начала"/>
+        <property name="dateEnd" type="date" label="Дата окончания"/>
+        
+    </concept>
+    
 </domain>

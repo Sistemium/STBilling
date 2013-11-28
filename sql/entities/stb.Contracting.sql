@@ -23,6 +23,15 @@ ch.defineEntity 'Accrual',
     @roles = 'Contract:Service'
 ;
 
+ch.defineEntity 'LegalEntity',
+    @properties = 'name:legalName',
+    @roles = 'Org'
+;
+
+ch.createTable @entity = 'LegalEntity',
+    @owner = 'stb', @isTemporary = 0, @forseDrop = 0
+;
+
 ch.createTable @entity = 'Contract',
     @owner = 'stb', @isTemporary = 0, @forseDrop = 0
 ;
