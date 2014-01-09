@@ -224,4 +224,18 @@
         
     </concept>
     
+    <concept name="UserStats">
+        
+        <select owner="stb" sql-name="UserStats" type="procedure">
+            <parameter name="dateStart" type="date" sql-name="@dateStart"/>
+            <parameter name="dateEnd" type="date" sql-name="@dateEnd"/>
+        </select>
+        
+        <property name="name" type="string" label="Пользователь"/>
+        <property name="operations-count" type="int" label="Кол-во операций"/>
+        <property name="dateStart" type="date" label="Дата начала"/>
+        <property name="dateEnd" type="date" label="Дата окончания"/>
+        
+    </concept>
+    
 </domain>

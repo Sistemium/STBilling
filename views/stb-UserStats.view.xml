@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<view-definition xmlns="http://unact.net/xml/xi" name="UserStats_view" label="Статистика Системы">
+	
+    <view-schema><form name="root" concept="ST">
+		
+		<parameter name="name">
+			<init with="username"/>
+		</parameter>
+		
+		<parameter name="dateStart" type="date" editable="true" label="Начало периода">
+			<init with="today"/>
+		</parameter>
+		
+		<parameter name="dateEnd" type="date" editable="true" label="Конец периода">
+			<init with="today"/>
+		</parameter>
+		
+		<form name="stb-legalEntity" expect-choise="true">
+			
+			<field name="id"/>
+			<field name="name"/>
+			<field name="legalName" label="Заказчик"/>
+			
+			<form name="stb-contract" expect-choise="true">
+				
+				<field name="id"/>
+				<field name="name" label="Договор"/>
+				
+			</form>
+			
+			<form name="UserStats" is-set="true" label="Показатели активности пользователей">
+				
+				<field name="name"/>
+				<field name="operations-count"/>
+				
+				<join name="root" field="dateStart"/>
+				<join name="root" field="dateEnd"/>
+				
+			</form>
+			
+			<field name="UserStats-count" type="int" label="Итого пользователей" sql-compute="null">
+				<xpath-compute>
+					count(../xi:set-of[@name='set-of-UserStats']/xi:data)
+				</xpath-compute>
+			</field>
+		</form>
+		
+    </form></view-schema>
+	
+    <workflow>
+        <step>
+            <display>
+				
+				<region class="hbox">
+					<region class="vbox">
+						<print form="stb-legalEntity" field="legalName"/>
+						<input field="dateStart"/>
+					</region>
+					<region class="vbox">
+						<print form="stb-contract" field="name"/>
+						<input field="dateEnd"/>
+					</region>
+				</region>
+				
+                <grid form="UserStats"/>
+				
+				<print field="UserStats-count"/>
+				
+            </display>
+        </step>
+    </workflow>
+	
+</view-definition>
