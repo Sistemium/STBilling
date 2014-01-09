@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<context-extension xmlns="http://unact.net/xml/xi" label="Sitemium UAB">
+<context-extension xmlns="http://unact.net/xml/xi" label="Система Sistemium">
     
     <menu name="sales" label="Клиентский учет" directory="views">
         <access role="st.com.client"/>
