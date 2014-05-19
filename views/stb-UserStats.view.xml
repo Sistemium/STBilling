@@ -1,50 +1,76 @@
 <?xml version="1.0"?>
 <view-definition xmlns="http://unact.net/xml/xi" name="UserStats_view" label="Статистика Системы">
 	
-    <view-schema><form name="root" concept="ST">
-		
-		<parameter name="name">
-			<init with="username"/>
-		</parameter>
-		
-		<parameter name="dateStart" type="date" editable="true" label="Начало периода">
-			<init with="today"/>
-		</parameter>
-		
-		<parameter name="dateEnd" type="date" editable="true" label="Конец периода">
-			<init with="today"/>
-		</parameter>
-		
-		<form name="stb-legalEntity" expect-choise="true">
+    <view-schema>
+        <form name="ST">
 			
-			<field name="id"/>
-			<field name="name"/>
-			<field name="legalName" label="Заказчик"/>
+            <parameter name="name">
+                <init with="username"/>
+            </parameter>
 			
-			<form name="stb-contract" expect-choise="true">
+            <parameter name="org">
+                <init with="role">org</init>
+            </parameter>
+			
+			<form name="Billing" concept="ST">
 				
-				<field name="id"/>
-				<field name="name" label="Договор"/>
+				<form name="stb-period" is-set="true" page-size="10">
+					
+					<order-by name="dateB" dir="desc"/>
+					
+					<field name="id"/>
+					
+					<field name="dateB"/>
+					<field name="dateE"/>
+					
+				</form>
 				
 			</form>
 			
-			<form name="UserStats" is-set="true" label="Показатели активности пользователей">
+			<form name="stb-period-detailed" concept="stb-period">
 				
-				<field name="name"/>
-				<field name="operations-count"/>
+				<parameter name="period-to-detail-id" type="int" property="id" modifiable="true"/>
 				
-				<join name="root" field="dateStart"/>
-				<join name="root" field="dateEnd"/>
+				<field name="dateB" label="Начало периода"/>
+				<field name="dateE" label="Конец периода"/>
+				
+				<form name="stb-legalContract" is-set="true" page-size="10">
+					
+					<field name="id"/>
+					<field name="name"/>
+					
+					<form name="stb-legalEntity">
+						
+						<field name="id"/>
+						<field name="name"/>
+						<field name="legalName" label="Заказчик"/>
+						
+					</form>
+					
+				</form>
+				
+				<form name="UserStats" is-set="true" label="Показатели активности пользователей">
+					
+					<parameter name="legalContract-to-detail-id" type="int"
+						property="stb-legalContract" modifiable="true"
+					/>
+					
+					<field name="name"/>
+					<field name="operations-count"/>
+					
+					<join name="stb-period-detailed" field="dateB"/>
+					<join name="stb-period-detailed" field="dateE"/>
+					
+				</form>
+				
+				<field name="UserStats-count" type="int" label="Итого пользователей" sql-compute="null">
+					<xpath-compute>
+						count(../xi:set-of[@name='set-of-UserStats']/xi:data)
+					</xpath-compute>
+				</field>
 				
 			</form>
 			
-			<field name="UserStats-count" type="int" label="Итого пользователей" sql-compute="null">
-				<xpath-compute>
-					count(../xi:set-of[@name='set-of-UserStats']/xi:data)
-				</xpath-compute>
-			</field>
-		</form>
-		
     </form></view-schema>
 	
     <workflow>

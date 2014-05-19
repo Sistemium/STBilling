@@ -28,7 +28,26 @@ ch.defineEntity 'LegalEntity',
     @roles = 'Org'
 ;
 
+ch.defineEntity 'LegalContract',
+    @properties = 'ndoc:dateB:dateE',
+    @roles = 'LegalEntity'
+;
+
+ch.defineEntity 'ProgramLicense',
+    @properties = 'name:term:dateB:dateE',
+    @roles = 'LegalContract'
+;
+
+
 ch.createTable @entity = 'LegalEntity',
+    @owner = 'stb', @isTemporary = 0, @forseDrop = 0
+;
+
+ch.createTable @entity = 'LegalContract',
+    @owner = 'stb', @isTemporary = 0, @forseDrop = 0
+;
+
+ch.createTable @entity = 'ProgramLicense',
     @owner = 'stb', @isTemporary = 0, @forseDrop = 0
 ;
 

@@ -1,9 +1,12 @@
-create or replace procedure stb.UserStats (
+create or replace procedure stb.DemoStats (
     @legalContract IDREF,
     @dateStart date default today(),
     @dateEnd date default today()
 ) begin
 
+select [date], sum ([operations-count]) as [operations-count],
+        list (distinct name, ', ' order by name) as names, list (distinct [program]) as [programs]
+from (
     select
         (select max(dub.name)
             from stb.DbUserDate dub
@@ -20,20 +23,17 @@ create or replace procedure stb.UserStats (
             group by dub.username
         ) as name,
         
-        sum(cnt) [operations-count],
-        count(distinct usage.[date]) [dates-count],
-        list(distinct Usage.program) [programs]
+        Usage.[date],
+        Usage.program,
+        sum(cnt) [operations-count]
         
     from stb.Usage
         join stb.Db
             on Db.id = Usage.db
         join stb.Contract c
             on c.org = Db.org and Usage.[date] between c.dateB and c.dateE
-        left join stb.[User] u on u.name = Usage.username
-        
         
     where Usage.[date] between @dateStart and @dateEnd
-        and u.price is null
         and Usage.path not like '%~%'
         and exists (
             select * from stb.ProgramLicense pl
@@ -42,11 +42,15 @@ create or replace procedure stb.UserStats (
                 and pl.dateB<=@dateEnd
                 and pl.dateE>=@dateStart
                 and Usage.[date] between pl.dateB and pl.dateE
-                and term = 'users'
+                and term = 'demo'
         )
-    group by Usage.username
-    having name is not null
-        and [operations-count] >= 10
-        and [dates-count] > 1
+        
+    group by
+        Usage.username,
+        usage.[date],
+        Usage.program
+) as t
+
+group by [date]
 
 end;

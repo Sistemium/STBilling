@@ -28,3 +28,9 @@ ch.defineProperties
     + ':href,string'
     + ':acceptanceDate,date'
 ;
+
+create domain TOKEN varchar (32) not null;
+
+ch.defineProperties
+    'term,TOKEN'
+;
