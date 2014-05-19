@@ -9,30 +9,35 @@
 			<init with="username"/>
 		</parameter>
 		
+		<parameter name="searcher" editable="true" label="Поиск" optional="true"/>
+		
 		<form name="Agent" is-set="true" extendable="true" deletable="true" label="Агенты" page-size="20">
 			
 			<field name="id" label="ИД"/>
 			<field name="name" editable="true"/>
 			<field name="org" editable="true"/>
 			<field name="mobile-number" editable="true"/>
-			<field name="program-url" editable="true"/>
-			<field name="billing_name" editable="true"/>
 			
-			<form name="salesman" concept="Salesman" choise="Salesman-cache" label="Торговый представитель">
+			<join name="PHA" field="searcher"/>
+			
+			<!--field name="program-url" editable="true"/>
+			<field name="billing_name" editable="true"/-->
+			
+			<!--form name="salesman" concept="Salesman" choise="Salesman-cache" label="Торговый представитель">
 				
 				<field name="id"/>
 				<field name="name" label="Торговый представитель"/>
 				
-			</form>
+			</form-->
 			
 		</form>
 		
-		<form concept="Salesman" name="Salesman-cache" is-set="true">
+		<!--form concept="Salesman" name="Salesman-cache" is-set="true">
 			
 			<field name="id"/>
 			<field name="name"  label="Торговый представитель"/>
 			
-		</form>
+		</form-->
 		
     </form></view-schema>
 	
@@ -40,6 +45,7 @@
         <step>
             <display>
 				
+				<input form="PHA" field="searcher"/>
                 <grid form="Agent"/>
 				
             </display>

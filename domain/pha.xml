@@ -26,6 +26,8 @@
         
         <role name="salesman" actor="Salesman"/>
         
+        <index name="searcher" sql-name="id, name, mobile_number"/>
+        
     </concept>
     
     <concept name="Salesman">
