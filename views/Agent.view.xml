@@ -9,7 +9,7 @@
 			<init with="username"/>
 		</parameter>
 		
-		<parameter name="searcher" editable="true" label="Поиск" optional="true"/>
+		<parameter name="searcher" editable="true" label="Поиск" optional="true" local-data="true"/>
 		
 		<form name="Agent" is-set="true" extendable="true" deletable="true" label="Агенты" page-size="20">
 			
