@@ -17,6 +17,8 @@
 			<field name="name" editable="true"/>
 			<field name="org" editable="true"/>
 			<field name="mobile-number" editable="true"/>
+			<field name="salesman" editable="true"/>
+			<field name="info" editable="true"/>
 			
 			<join name="PHA" field="searcher"/>
 			

@@ -24,7 +24,9 @@
         <property name="mobile-number" type="string" label="Сотовый номер" sql-name="mobile_number"/>
         <property name="program-url" type="string" label="Инстанс" sql-name="program_url"/>
         
-        <role name="salesman" actor="Salesman"/>
+        <property name="salesman" type="int" label="Настройка"/>
+        <property name="info" type="string" label="Комментарий"/>
+        <property name="isDisabled" type="boolean" label="Заблокирован"/>
         
         <index name="searcher" sql-name="id, name, mobile_number"/>
         
