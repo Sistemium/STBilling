@@ -7,7 +7,7 @@ create or replace procedure stb.periodByOrg (
 
 end;
 
-create or replace view stb.period 
+create or replace view stb.period
 as select
         string(2000 + y.row_num, if m.row_num < 10 then '0' endif, m.row_num) as id,
         cast(id+'01' as date) as dateB,
@@ -15,6 +15,6 @@ as select
     from rowgenerator y
         join rowgenerator m
         on m.row_num between 1 and 12
-    where y.row_num between 13 and 14
+    where y.row_num between 13 and 15
     and dateb between '20130701' and today()
 ;
