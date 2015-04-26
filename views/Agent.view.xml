@@ -15,13 +15,16 @@
 			
 			<field name="id" label="ИД"/>
 			<field name="name" editable="true"/>
-			<field name="org" editable="true"/>
+			<field name="org" editable="true" label="Орг."/>
 			<field name="mobile-number" editable="true"/>
 			<field name="salesman" editable="true"/>
 			<field name="info" editable="true"/>
 			
 			<join name="PHA" field="searcher"/>
 			
+
+			<order-by name="ts" dir="desc"/>
+
 			<!--field name="program-url" editable="true"/>
 			<field name="billing_name" editable="true"/-->
 			
