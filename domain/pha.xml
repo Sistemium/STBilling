@@ -6,16 +6,16 @@
 >
 
     <concept name="PHA">
-        
+
         <select owner="sys" sql-name="dummy"/>
-        
+
     </concept>
-    
+
     <concept name="Agent">
         <select owner="bs" sql-name="Agent"/>
-        
+
         <save owner="bs" sql-name="Agent"/>
-        
+
         <property name="id" type="int" key="true"/>
         <property name="xid"/>
         <property name="name" type="string" label="Название"/>
@@ -29,20 +29,20 @@
         <property name="salesman" type="int" label="Salesman"/>
         <property name="info" type="string" label="Комментарий"/>
         <property name="isDisabled" type="boolean" label="Заблокирован"/>
-        
+
         <index name="searcher" sql-name="id, name, mobile_number"/>
-        
+
     </concept>
-    
+
     <concept name="Salesman">
         <select owner="bs" sql-name="Salesman"/>
-        
+
         <save owner="bs" sql-name="Salesman"/>
-        
+
         <property name="id" type="int" key="true"/>
         <property name="xid"/>
         <property name="name" type="string" label="Название"/>
-        
+
     </concept>
-    
+
 </domain>
