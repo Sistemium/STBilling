@@ -22,9 +22,11 @@
         <property name="org" type="string" label="Организация"/>
         <property name="billing_name" type="string" label="Название в счете"/>
         <property name="mobile-number" type="string" label="Сотовый номер" sql-name="mobile_number"/>
+        <property name="email" type="string" label="E-mail"/>
+        <property name="roles" type="string" label="Роли"/>
         <property name="program-url" type="string" label="Инстанс" sql-name="program_url"/>
-        
-        <property name="salesman" type="int" label="Настройка"/>
+
+        <property name="salesman" type="int" label="Salesman"/>
         <property name="info" type="string" label="Комментарий"/>
         <property name="isDisabled" type="boolean" label="Заблокирован"/>
         

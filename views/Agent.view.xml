@@ -1,60 +1,108 @@
 <?xml version="1.0"?>
 <view-definition xmlns="http://unact.net/xml/xi" name="Agent_view" label="Пользователи PHA">
-	
+
     <access role="admin"/>
-	
+
     <view-schema><form name="PHA">
-		
+
 		<parameter name="name">
 			<init with="username"/>
 		</parameter>
-		
+
 		<parameter name="searcher" editable="true" label="Поиск" optional="true" local-data="true"/>
-		
-		<form name="Agent" is-set="true" extendable="true" deletable="true" label="Агенты" page-size="20">
-			
+
+        <form name="agent-detailed" concept="Agent">
+
+            <parameter name="agent-to-detail-id" type="int" modifiable="true" property="id"/>
+
 			<field name="id" label="ИД"/>
 			<field name="name" editable="true"/>
 			<field name="org" editable="true" label="Орг."/>
 			<field name="mobile-number" editable="true"/>
 			<field name="salesman" editable="true"/>
 			<field name="info" editable="true"/>
-			
+            <field name="roles" editable="true"/>
+            <field name="email" editable="true"/>
+            <field name="billing_name" editable="true"/>
+
+		</form>
+
+		<form name="Agent" is-set="true" label="Агенты" page-size="20"
+             extendable="true" toggle-edit-off="true"
+        >
+
+			<field name="id" label="ИД"/>
+			<field name="name" editable="true"/>
+			<field name="org" editable="true" label="Орг."/>
+			<field name="mobile-number" editable="true"/>
+			<field name="salesman" editable="true"/>
+			<field name="info" editable="true"/>
+
 			<join name="PHA" field="searcher"/>
-			
 
 			<order-by name="ts" dir="desc"/>
 
-			<!--field name="program-url" editable="true"/>
-			<field name="billing_name" editable="true"/-->
-			
-			<!--form name="salesman" concept="Salesman" choise="Salesman-cache" label="Торговый представитель">
-				
-				<field name="id"/>
-				<field name="name" label="Торговый представитель"/>
-				
-			</form-->
-			
 		</form>
-		
+
 		<!--form concept="Salesman" name="Salesman-cache" is-set="true">
-			
+
 			<field name="id"/>
 			<field name="name"  label="Торговый представитель"/>
-			
+
 		</form-->
-		
+
     </form></view-schema>
-	
+
     <workflow>
-        <step>
+
+        <step name="index-step">
             <display>
-				
+
 				<input form="PHA" field="searcher"/>
-                <grid form="Agent"/>
-				
+
+                <grid form="Agent">
+					<option reuse="agent-detail-button"/>
+				</grid>
+
             </display>
         </step>
+
+		<step name="agent-detail-step" hidden="true">
+
+            <options>
+				<option reuse="to-index"/>
+            </options>
+
+            <display>
+
+				<print form="agent-detailed" field="id"/>
+				<input form="agent-detailed" field="name"/>
+                <input form="agent-detailed" field="org"/>
+                <input form="agent-detailed" field="mobile-number"/>
+                <input form="agent-detailed" field="email"/>
+                <input form="agent-detailed" field="salesman"/>
+                <input form="agent-detailed" field="roles"/>
+
+                <input form="agent-detailed" field="info"/>
+                <input form="agent-detailed" field="billing_name"/>
+                <input form="agent-detailed" field="program-url"/>
+
+            </display>
+        </step>
+
+		<reusables>
+
+            <option name="agent-detail-button" label="...">
+                <command name="agent-to-detail-id" xpath-compute="xi:datum[@name='id']"/>
+				<command name="Agent_view">agent-detail-step</command>
+            </option>
+
+            <option name="to-index" label="К списку">
+                <command name="Agent_view">index-step</command>
+            </option>
+
+		</reusables>
+
     </workflow>
-	
+
 </view-definition>
