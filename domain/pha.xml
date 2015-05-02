@@ -34,6 +34,24 @@
 
     </concept>
 
+    <concept name="pha-AccessToken">
+
+        <select owner="pha" sql-name="AccessToken"/>
+
+        <save owner="pha" sql-name="AccessToken"/>
+
+        <property name="id" type="int" key="true"/>
+        <property name="xid"/>
+
+        <property name="token" type="string" label="Токен"/>
+        <property name="code" type="string" label="Код"/>
+        <property name="expiresAt" type="datetime" label="Действие до"/>
+        <property name="lastAuth" type="datetime" label="Активность"/>
+
+        <role name="agent" actor="Agent" sql-name="agent"/>
+
+    </concept>
+
     <concept name="Salesman">
         <select owner="bs" sql-name="Salesman"/>
 

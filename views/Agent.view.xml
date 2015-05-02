@@ -25,6 +25,16 @@
             <field name="email" editable="true"/>
             <field name="billing_name" editable="true"/>
 
+            <form name="agent-detailed-token" concept="pha-AccessToken"
+                is-set="true" page-size="20" label="Токены"
+            >
+
+                <add-labeled-fields/>
+
+                <order-by name="lastAuth" dir="desc"/>
+
+            </form>
+
 		</form>
 
 		<form name="Agent" is-set="true" label="Агенты" page-size="20"
@@ -86,6 +96,8 @@
                 <input form="agent-detailed" field="info"/>
                 <input form="agent-detailed" field="billing_name"/>
                 <input form="agent-detailed" field="program-url"/>
+
+                <grid form="agent-detailed-token"/>
 
             </display>
         </step>
