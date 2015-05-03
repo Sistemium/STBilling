@@ -35,6 +35,19 @@
 
             </form>
 
+            <form name="agent-detailed-role" concept="pha-AccountRole"
+                is-set="true" label="Роли" extendable="true" deletable="true"
+                parent-sql-name="account"
+            >
+
+                <field name="xid"/>
+                <field name="role" editable="true"/>
+                <field name="data" editable="true"/>
+
+                <order-by name="role" dir="asc"/>
+
+            </form>
+
 		</form>
 
 		<form name="Agent" is-set="true" label="Агенты" page-size="20"
@@ -85,21 +98,27 @@
 
             <display>
 
-				<print form="agent-detailed" field="id"/>
-				<input form="agent-detailed" field="name"/>
-                <input form="agent-detailed" field="org"/>
-                <input form="agent-detailed" field="mobile-number"/>
-                <input form="agent-detailed" field="email"/>
-                <input form="agent-detailed" field="salesman"/>
-                <input form="agent-detailed" field="roles"/>
+                <region>
+                    <print form="agent-detailed" field="id"/>
+    				<input form="agent-detailed" field="name"/>
+                    <input form="agent-detailed" field="org"/>
+                    <input form="agent-detailed" field="mobile-number"/>
+                    <input form="agent-detailed" field="email"/>
+                    <input form="agent-detailed" field="salesman"/>
+                    <input form="agent-detailed" field="roles"/>
 
-                <input form="agent-detailed" field="info"/>
-                <input form="agent-detailed" field="billing_name"/>
-                <input form="agent-detailed" field="program-url"/>
+                    <input form="agent-detailed" field="info"/>
+                    <input form="agent-detailed" field="billing_name"/>
+                    <input form="agent-detailed" field="program-url"/>
+                </region>
 
-                <grid form="agent-detailed-token"/>
+                <region class="tabs">
+                    <grid form="agent-detailed-token"/>
+                    <grid form="agent-detailed-role"/>
+                </region>
 
             </display>
+
         </step>
 
 		<reusables>

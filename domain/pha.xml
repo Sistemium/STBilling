@@ -52,6 +52,24 @@
 
     </concept>
 
+
+    <concept name="pha-AccountRole">
+
+        <select owner="pha" sql-name="accountRole"/>
+
+        <save owner="pha" sql-name="accountRole"/>
+
+        <property name="id" type="int" key="true"/>
+        <property name="xid"/>
+
+        <property name="role" type="string" label="Роль"/>
+        <property name="data" type="string" label="Значение"/>
+
+        <role name="agent" actor="Agent" sql-name="account"/>
+
+    </concept>
+
+
     <concept name="Salesman">
         <select owner="bs" sql-name="Salesman"/>
 
