@@ -42,9 +42,13 @@
 
                 <field name="xid"/>
                 <field name="role" editable="true"/>
+                <field name="ord" editable="true"/>
                 <field name="data" editable="true"/>
 
+
                 <order-by name="role" dir="asc"/>
+                <order-by name="ord" dir="asc"/>
+                <order-by name="id" dir="asc"/>
 
             </form>
 

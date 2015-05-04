@@ -64,6 +64,7 @@
 
         <property name="role" type="string" label="Роль"/>
         <property name="data" type="string" label="Значение"/>
+        <property name="ord" type="int" label="№"/>
 
         <role name="agent" actor="Agent" sql-name="account"/>
 
