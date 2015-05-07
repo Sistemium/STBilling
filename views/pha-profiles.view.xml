@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<view-definition xmlns="http://unact.net/xml/xi" name="pha-profiles" label="Профили PHA">
+
+    <access role="admin"/>
+
+    <view-schema><form name="PHA">
+
+		<parameter name="name">
+			<init with="username"/>
+		</parameter>
+
+		<form name="profile-detailed" concept="pha-Profile">
+
+            <parameter name="profile-to-detail-id" type="int" modifiable="true" property="id"/>
+
+            <field name="id"/>
+
+			<field name="xid"/>
+			<field name="name" editable="true"/>
+			<field name="code" editable="true"/>
+
+            <form name="profile-detailed-role" concept="pha-ProfileRole"
+                is-set="true" label="Роли" extendable="true" deletable="true"
+                parent-sql-name="profile"
+            >
+
+                <field name="xid"/>
+                <field name="role" editable="true"/>
+                <field name="ord" editable="true"/>
+                <field name="data" editable="true"/>
+
+
+                <order-by name="role" dir="asc"/>
+                <order-by name="ord" dir="asc"/>
+                <order-by name="id" dir="asc"/>
+
+            </form>
+
+		</form>
+
+		<form name="Profile" concept="pha-Profile" is-set="true" label="Профили" page-size="20"
+             extendable="true" toggle-edit-off="true"
+        >
+
+			<field name="id"/>
+			<field name="name" editable="true"/>
+			<field name="code" editable="true"/>
+
+		</form>
+
+    </form></view-schema>
+
+    <workflow>
+
+        <step name="index-step">
+            <display>
+
+				<grid form="Profile">
+					<option reuse="profile-detail-button"/>
+				</grid>
+
+            </display>
+        </step>
+
+		<step name="profile-detail-step" hidden="true">
+
+            <options>
+				<option reuse="to-index"/>
+            </options>
+
+            <display>
+
+                <region>
+                    <input form="profile-detailed" field="name"/>
+                    <input form="profile-detailed" field="code"/>
+                </region>
+
+                <region class="tabs">
+                    <grid form="profile-detailed-role"/>
+                </region>
+
+            </display>
+
+        </step>
+
+		<reusables>
+
+            <option name="profile-detail-button" label="...">
+                <command name="profile-to-detail-id" xpath-compute="xi:datum[@name='id']"/>
+				<command name="pha-profiles">profile-detail-step</command>
+            </option>
+
+            <option name="to-index" label="К списку">
+                <command name="pha-profiles">index-step</command>
+            </option>
+
+		</reusables>
+
+    </workflow>
+
+</view-definition>

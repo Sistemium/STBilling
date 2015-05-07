@@ -71,6 +71,39 @@
     </concept>
 
 
+    <concept name="pha-Profile">
+
+        <select owner="pha" sql-name="Profile"/>
+
+        <save owner="pha" sql-name="Profile"/>
+
+        <property name="id" type="int" key="true"/>
+        <property name="xid"/>
+
+        <property name="name" type="string" label="Название"/>
+        <property name="code" type="string" label="Код"/>
+
+    </concept>
+    
+
+    <concept name="pha-ProfileRole">
+
+        <select owner="pha" sql-name="ProfileRole"/>
+
+        <save owner="pha" sql-name="ProfileRole"/>
+
+        <property name="id" type="int" key="true"/>
+        <property name="xid"/>
+
+        <property name="role" type="string" label="Роль"/>
+        <property name="data" type="string" label="Значение"/>
+        <property name="ord" type="int" label="№"/>
+
+        <role name="profile" actor="pha-Profile" sql-name="profile"/>
+
+    </concept>
+
+
     <concept name="Salesman">
         <select owner="bs" sql-name="Salesman"/>
 
