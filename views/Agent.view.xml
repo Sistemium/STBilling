@@ -24,6 +24,7 @@
             <field name="roles" editable="true"/>
             <field name="email" editable="true"/>
             <field name="billing_name" editable="true"/>
+            <field name="isDisabled" editable="true"/>
 
             <form name="agent-detailed-token" concept="pha-AccessToken"
                 is-set="true" page-size="20" label="Токены"
@@ -114,6 +115,7 @@
                     <input form="agent-detailed" field="info"/>
                     <input form="agent-detailed" field="billing_name"/>
                     <input form="agent-detailed" field="program-url"/>
+                    <input form="agent-detailed" field="isDisabled"/>
                 </region>
 
                 <region class="tabs">
