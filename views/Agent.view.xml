@@ -32,7 +32,7 @@
 
                 <add-labeled-fields/>
 
-                <order-by name="lastAuth" dir="desc"/>
+                <order-by name="ts" dir="desc"/>
 
             </form>
 
