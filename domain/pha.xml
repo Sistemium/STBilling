@@ -83,6 +83,7 @@
         <property name="name" type="string" label="Название"/>
         <property name="code" type="string" label="Код"/>
         <property name="minBuild" type="int" label="Мин. версия"/>
+        <property name="maxBuild" type="int" label="Макс. версия"/>
 
     </concept>
     
@@ -100,6 +101,7 @@
         <property name="data" type="string" label="Значение"/>
         <property name="ord" type="int" label="№"/>
         <property name="minBuild" type="int" label="Мин. версия"/>
+        <property name="maxBuild" type="int" label="Макс. версия"/>
 
         <role name="profile" actor="pha-Profile" sql-name="profile"/>
 
