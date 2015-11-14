@@ -18,6 +18,7 @@
 			<field name="xid"/>
 			<field name="name" editable="true"/>
 			<field name="code" editable="true"/>
+            <field name="minBuild" editable="true"/>
 
             <form name="profile-detailed-role" concept="pha-ProfileRole"
                 is-set="true" label="Роли" extendable="true" deletable="true"
@@ -26,6 +27,7 @@
 
                 <field name="xid"/>
                 <field name="role" editable="true"/>
+                <field name="minBuild" editable="true"/>
                 <field name="ord" editable="true"/>
                 <field name="data" editable="true"/>
 
@@ -45,6 +47,7 @@
 			<field name="id"/>
 			<field name="name" editable="true"/>
 			<field name="code" editable="true"/>
+            <field name="minBuild" editable="true"/>
 
 		</form>
 
